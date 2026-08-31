@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+
+# Large / non-source artifacts: excluded from the repo
+ckpt/not_primary/
+ckpt/agent0_train.pt
+ckpt/1e8_backup/
+data/
+logs/
+tests/

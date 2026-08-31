@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>魔方 AI 复原 · 扩散距离 ResMLP</title>
+<link rel="stylesheet" href="/ui/style.css" />
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+  <div id="app">
+    <div id="sidebar">
+      <h1>魔方 AI 复原</h1>
+      <p class="sub">ResMLP 扩散距离 + 束搜索</p>
+
+      <div class="group mode-switch">
+        <button id="mode-normal" class="btn mode active">🧊 普通模式</button>
+        <button id="mode-custom" class="btn mode">🎨 自定义模式</button>
+      </div>
+
+
+      <div class="group">
+        <button id="btn-scramble" class="btn primary">🎲 随机打乱</button>
+        <button id="btn-solve" class="btn primary">✨ 复原</button>
+        <button id="btn-reset" class="btn">↺ 重置</button>
+      </div>
+
+      <div class="group">
+        <label for="beam">beam（束宽）</label>
+        <select id="beam">
+          <option value="1024">1024</option>
+          <option value="2048">2048</option>
+          <option value="4096" selected>4096</option>
+          <option value="5120">5120</option>
+        </select>
+      </div>
+
+      <div class="group">
+        <label for="scramble-speed">打乱速度：<span id="scramble-speed-val">0.1</span> s/步</label>
+        <input type="range" id="scramble-speed" min="100" max="5000" step="100" value="100" />
+      </div>
+      <div class="group">
+        <label for="solve-speed">复原速度：<span id="solve-speed-val">0.2</span> s/步</label>
+        <input type="range" id="solve-speed" min="100" max="5000" step="100" value="200" />
+      </div>
+
+      <div class="group">
+        <label>手动转动（自己参与打乱）</label>
+        <div class="moves">
+          <button class="mv" data-move="U">U</button><button class="mv" data-move="U'">U'</button>
+          <button class="mv" data-move="D">D</button><button class="mv" data-move="D'">D'</button>
+          <button class="mv" data-move="L">L</button><button class="mv" data-move="L'">L'</button>
+          <button class="mv" data-move="R">R</button><button class="mv" data-move="R'">R'</button>
+          <button class="mv" data-move="F">F</button><button class="mv" data-move="F'">F'</button>
+          <button class="mv" data-move="B">B</button><button class="mv" data-move="B'">B'</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <button id="btn-custom" class="btn">🎨 自定义盘面</button>
+      </div>
+
+      <div id="custom-panel" class="group hidden">
+        <label>自定义盘面（对照手中魔方涂色）</label>
+        <div class="palette">
+          <button class="swatch sel" data-color="U" style="background:#f7f7f7" title="白"></button>
+          <button class="swatch" data-color="R" style="background:#c41e3a" title="红"></button>
+          <button class="swatch" data-color="F" style="background:#009e60" title="绿"></button>
+          <button class="swatch" data-color="D" style="background:#ffd500" title="黄"></button>
+          <button class="swatch" data-color="L" style="background:#ff8c00" title="橙"></button>
+          <button class="swatch" data-color="B" style="background:#0051ba" title="蓝"></button>
+        </div>
+        <div class="net"></div>
+        <div class="group">
+          <button id="btn-validate" class="btn">✔ 检查合法性</button>
+          <button id="btn-solve-facelet" class="btn primary">✨ 求解</button>
+          <button id="btn-preview" class="btn">🧊 预览 3D</button>
+          <button id="btn-close-custom" class="btn">关闭</button>
+        </div>
+        <div id="facelet-result" class="status"></div>
+      </div>
+
+      <div class="group">
+        <button id="btn-shutdown" class="btn danger">🛑 关闭网站</button>
+      </div>
+
+      <div class="group">
+        <div id="status" class="status">就绪（可拖动视角 / 打乱 / 复原）</div>
+      </div>
+      <div class="hint">
+        提示：拖动鼠标旋转视角；「随机打乱」或「手动转动」打乱后再点「复原」；「自定义盘面」可对照手中魔方涂色后求解。
+      </div>
+    </div>
+    <div id="canvas-wrap"></div>
+  </div>
+  <script type="module" src="/ui/app.js"></script>
+</body>
+</html>
